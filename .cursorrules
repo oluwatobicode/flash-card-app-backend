@@ -69,3 +69,12 @@ src/
 - Import interfaces from `../interfaces`, don't define inline
 - Use `userId: string` for Better Auth user references
 
+### Validators (Zod)
+- All request validation schemas go in `src/validators/`
+- Use Zod for schema validation
+- Each entity has its own schema file: `entityName.schema.ts`
+- Common schemas (mongoId, pagination, emptyObject) in `common.schema.ts`
+- Export via `src/validators/index.ts`
+- Apply `validate()` middleware to all routes
+- Use `emptyObjectSchema` for requests that should have no body/params/query
+- Export types alongside schemas: `export type CreateDeckBody = z.infer<typeof createDeckBody>`

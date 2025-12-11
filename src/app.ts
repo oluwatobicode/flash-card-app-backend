@@ -23,9 +23,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
 // Logging
-if (config.nodeEnv === "development") {
-  app.use(morgan("dev"));
-}
+app.use(morgan("dev"));
 
 // Health check route
 app.get("/health", (req, res) => {
