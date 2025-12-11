@@ -1,6 +1,8 @@
 import dotenv from "dotenv";
+import path from "path";
 
-dotenv.config();
+// 1. Force it to look 2 folders up (src -> config -> root)
+dotenv.config({ path: path.resolve(__dirname, "../../.env") });
 
 /**
  * Application Configuration

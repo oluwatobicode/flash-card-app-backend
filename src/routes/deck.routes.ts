@@ -13,6 +13,7 @@ import {
 
 const router = Router();
 
+<<<<<<< HEAD
 // All deck routes require authentication
 router.use(requireAuth);
 
@@ -78,5 +79,12 @@ router.post(
   }),
   deckController.generateAIDeck,
 );
+=======
+router.post("/", deckController.createDeck);
+router.delete("/:id", deckController.deleteDeck);
+router.get("/:id", deckController.getAllDecks);
+router.get("/:id", deckController.getDeckById);
+router.patch("/:id", deckController.updateDeckById);
+>>>>>>> 6553417 (pushed)
 
 export default router;

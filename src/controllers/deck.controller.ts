@@ -27,6 +27,11 @@ export const createDeck = async (
       data: { deck },
     });
   } catch (err) {
+    console.log("Error creating deck:", err);
+    res.status(500).json({
+      status: "fail",
+      message: "Internal Server Error",
+    });
     next(err);
   }
 };
@@ -39,6 +44,8 @@ export const deleteDeck = async (
   res: Response,
   next: NextFunction,
 ): Promise<void> => {
+  const { id } = req.params;
+
   try {
     const userId = req.user!.id;
     const { id } = req.params;
@@ -73,6 +80,7 @@ export const deleteDeck = async (
     res.status(HTTP_STATUS.NO_CONTENT).send();
   } catch (err) {
     next(err);
+    console.log("Error deleting deck:", err);
   }
 };
 
@@ -134,6 +142,7 @@ export const getDeckById = async (
     });
   } catch (err) {
     next(err);
+    console.log("Error getting deck by ID:", err);
   }
 };
 
@@ -248,6 +257,11 @@ export const generateAIDeck = async (
       },
     });
   } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      status: "fail",
+      message: "internal server error",
+    });
     next(err);
   }
 };
