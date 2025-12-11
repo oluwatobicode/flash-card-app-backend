@@ -1,25 +1,11 @@
-import mongoose, { Document, Schema } from "mongoose";
-
-interface IReviewedCard {
-  cardId: mongoose.Types.ObjectId;
-  userGrade: "easy" | "good" | "hard" | "again";
-  timeSpent?: number;
-  timeStamp: Date;
-}
-
-export interface IStudySession extends Document {
-  user: mongoose.Types.ObjectId;
-  deckId: mongoose.Types.ObjectId;
-  startTime: Date;
-  endTime?: Date;
-  reviewedCards: IReviewedCard[];
-}
+import mongoose, { Schema } from "mongoose";
+import { IStudySession } from "../interfaces";
 
 const studySessionSchema = new Schema<IStudySession>({
-  user: {
-    type: Schema.Types.ObjectId,
-    ref: "User",
+  userId: {
+    type: String,
     required: [true, "A study session must belong to a user"],
+    index: true,
   },
   deckId: {
     type: Schema.Types.ObjectId,

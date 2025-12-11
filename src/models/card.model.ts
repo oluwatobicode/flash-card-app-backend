@@ -1,14 +1,5 @@
-import mongoose, { Document, Schema } from "mongoose";
-
-export interface ICard extends Document {
-  question: string;
-  answer: string;
-  deckId: mongoose.Types.ObjectId;
-  easeFactor: number;
-  interval: number;
-  repetition: number;
-  nextReviewDate: Date;
-}
+import mongoose, { Schema } from "mongoose";
+import { ICard } from "../interfaces";
 
 const cardSchema = new Schema<ICard>({
   question: {

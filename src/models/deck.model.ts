@@ -1,26 +1,26 @@
-import mongoose, { Document, Schema } from "mongoose";
+import mongoose, { Schema } from "mongoose";
+import { IDeck } from "../interfaces";
 
-export interface IDeck extends Document {
-  deckName: string;
-  user: mongoose.Types.ObjectId;
-  totalCards?: number;
-}
-
-const deckSchema = new Schema<IDeck>({
-  deckName: {
-    type: String,
-    required: [true, "A deck must have a name"],
+const deckSchema = new Schema<IDeck>(
+  {
+    deckName: {
+      type: String,
+      required: [true, "A deck must have a name"],
+    },
+    userId: {
+      type: String,
+      required: [true, "A deck must belong to a user"],
+      index: true,
+    },
+    totalCards: {
+      type: Number,
+      default: 0,
+    },
   },
-  user: {
-    type: Schema.Types.ObjectId,
-    ref: "User",
-    required: [true, "A deck must belong to a user"],
+  {
+    timestamps: true,
   },
-  totalCards: {
-    type: Number,
-    default: 0,
-  },
-});
+);
 
 const Deck = mongoose.model<IDeck>("Deck", deckSchema);
 export default Deck;

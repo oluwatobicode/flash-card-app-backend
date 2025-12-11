@@ -1,0 +1,71 @@
+# Flash Card App Backend - Project Rules
+
+## Project Structure
+
+This is an Express.js + TypeScript backend using MongoDB (Mongoose) with Better Auth for authentication.
+
+## Configuration Conventions
+
+### Environment Variables & Config
+- All environment variables should be accessed via `src/config/app.config.ts`
+- Import config as: `import { config } from "../config"`
+- Never access `process.env` directly outside of `app.config.ts`
+
+### Constants
+- Magic numbers and hardcoded values go in `src/config/constants.config.ts`
+- Time values, HTTP status codes, error messages, etc. should be constants
+- Import constants from: `import { CONSTANT_NAME } from "../config"`
+
+### File Organization
+```
+src/
+├── config/          # All configuration (app.config, constants.config, db.config)
+├── controllers/     # Route handlers
+├── interfaces/      # TypeScript interfaces (e.g., IUser, IDeck)
+├── lib/             # Core libraries (auth, etc.)
+├── middleware/      # Express middleware
+├── models/          # Mongoose models (import interfaces from ../interfaces)
+├── routes/          # Express routes
+├── services/        # Business logic services
+├── utils/           # Utility functions
+└── validators/      # Request validation schemas
+```
+
+## Authentication
+
+- Uses Better Auth with MongoDB adapter
+- Auth routes are at `/api/auth/*` (handled by Better Auth)
+- Protected routes use `requireAuth` middleware from `src/middleware`
+- User data is managed by Better Auth; app-specific user data goes in `UserProfile` model
+- User references in models use `userId: string` (Better Auth user ID), not ObjectId
+
+## Coding Standards
+
+### TypeScript
+- Use explicit types, avoid `any`
+- Export types alongside implementations
+- Use interfaces for object shapes
+
+### Express
+- Controllers return `Promise<void>` and use `next(err)` for error handling
+- Use the centralized error handler middleware
+- Controllers handle HTTP request/response only, delegate to services for business logic
+
+### Services
+- All database/model interactions go in `src/services/`
+- Each service in its own file: `entityName.service.ts`
+- Export via `src/services/index.ts`
+- Import as: `import { entityService } from "../services"`
+- Services contain business logic and return data, not HTTP responses
+
+### Interfaces
+- All TypeScript interfaces go in `src/interfaces/`
+- Each interface in its own file: `entityName.interface.ts`
+- Export via `src/interfaces/index.ts`
+- Import as: `import { IEntity } from "../interfaces"`
+
+### Models
+- Each model in its own file: `modelName.model.ts`
+- Import interfaces from `../interfaces`, don't define inline
+- Use `userId: string` for Better Auth user references
+

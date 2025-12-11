@@ -1,5 +1,4 @@
 import { Request, Response, NextFunction } from "express";
-import { StudySession } from "../models";
 
 export const study = async (
   req: Request,

@@ -29,3 +29,16 @@ export const SUCCESS_MESSAGES = {
 };
 
 export const API_VERSION = "v1";
+
+// Time constants (in seconds)
+export const TIME = {
+  ONE_HOUR: 60 * 60,
+  ONE_DAY: 60 * 60 * 24,
+  ONE_WEEK: 60 * 60 * 24 * 7,
+};
+
+// Session configuration
+export const SESSION = {
+  EXPIRES_IN: TIME.ONE_WEEK, // 7 days
+  UPDATE_AGE: TIME.ONE_DAY, // 1 day
+};

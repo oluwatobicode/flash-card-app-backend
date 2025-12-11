@@ -1,9 +1,10 @@
 import express, { Application } from "express";
 import morgan from "morgan";
 import cors from "cors";
+import { toNodeHandler } from "better-auth/node";
 import { config, connectDB } from "./config";
+import { auth } from "./lib";
 import {
-  authRoutes,
   userRoutes,
   deckRoutes,
   cardRoutes,
@@ -34,8 +35,10 @@ app.get("/health", (req, res) => {
   });
 });
 
+// Better Auth routes - must be before other routes
+app.all("/api/auth/*", toNodeHandler(auth));
+
 // API routes
-app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/decks", deckRoutes);
 app.use("/api/v1/cards", cardRoutes);

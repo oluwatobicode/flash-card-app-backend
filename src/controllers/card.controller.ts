@@ -1,5 +1,4 @@
 import { Request, Response, NextFunction } from "express";
-import { Card } from "../models";
 
 export const createCard = async (
   req: Request,
