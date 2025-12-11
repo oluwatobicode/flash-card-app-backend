@@ -1,4 +1,6 @@
 import { Request, Response, NextFunction } from "express";
+import { HTTP_STATUS } from "../config";
+import { cardService } from "../services";
 
 export const createCard = async (
   req: Request,
@@ -15,13 +17,13 @@ export const createCard = async (
       });
     }
 
-    const newCard = await Card.create({
+    const newCard = await cardService.createCard({
       question,
       answer,
       deckId,
     });
 
-    res.status(201).json({
+    res.status(HTTP_STATUS.CREATED).json({
       status: "success",
       message: "Card created successfully",
       data: {
@@ -60,13 +62,25 @@ export const deleteCard = async (
   next: NextFunction,
 ): Promise<void> => {
   try {
-    // TODO: Implement delete card logic
-    res.status(204).json({
-      status: "success",
-      data: null,
-    });
+    const { id } = req.params;
+
+    console.log(id);
+
+    const card = await cardService.deleteCard(id);
+
+    console.log(card);
+
+    if (!card) {
+      res.status(HTTP_STATUS.NOT_FOUND).json({
+        status: "error",
+        message: "Card not found",
+      });
+    }
+
+    res.status(HTTP_STATUS.NO_CONTENT).send();
   } catch (err) {
     next(err);
+    console.log("Error deleting card:", err);
   }
 };
 
@@ -76,10 +90,22 @@ export const updateCardById = async (
   next: NextFunction,
 ): Promise<void> => {
   try {
-    // TODO: Implement update card by ID logic
-    res.status(200).json({
+    const { id } = req.params;
+
+    const updatedCard = await cardService.updateCard(id, req.body);
+
+    if (!updatedCard) {
+      res.status(HTTP_STATUS.NOT_FOUND).json({
+        status: "error",
+        message: "Card not found",
+      });
+      return;
+    }
+
+    res.status(HTTP_STATUS.OK).json({
       status: "success",
-      message: "Update card by ID endpoint - to be implemented",
+      message: "Card updated successfully",
+      data: { updatedCard },
     });
   } catch (err) {
     next(err);

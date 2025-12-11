@@ -44,8 +44,6 @@ export const deleteDeck = async (
   res: Response,
   next: NextFunction,
 ): Promise<void> => {
-  const { id } = req.params;
-
   try {
     const userId = req.user!.id;
     const { id } = req.params;
