@@ -7,6 +7,7 @@ import {
   idParamSchema,
   createCardBody,
   updateCardBody,
+  askAiAboutCardBody,
 } from "../validators";
 
 const router = Router();
@@ -48,9 +49,9 @@ router.delete(
 router.post(
   "/ask-ai",
   validate({
-    // body: emptyObjectSchema,
-    // params: idParamSchema,
-    // query: emptyObjectSchema,
+    body: askAiAboutCardBody,
+    params: emptyObjectSchema,
+    query: emptyObjectSchema,
   }),
   cardController.askAiAboutCard,
 );

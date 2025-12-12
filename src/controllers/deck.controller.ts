@@ -6,6 +6,11 @@ import {
   aiService,
   userProfileService,
 } from "../services";
+import {
+  NotFoundException,
+  ForbiddenException,
+  BadRequestException,
+} from "../utils";
 
 /**
  * Create a new empty deck
@@ -27,11 +32,6 @@ export const createDeck = async (
       data: { deck },
     });
   } catch (err) {
-    console.log("Error creating deck:", err);
-    res.status(500).json({
-      status: "fail",
-      message: "Internal Server Error",
-    });
     next(err);
   }
 };
@@ -51,19 +51,13 @@ export const deleteDeck = async (
     const deck = await deckService.getDeckById(id);
 
     if (!deck) {
-      res.status(HTTP_STATUS.NOT_FOUND).json({
-        status: "error",
-        message: "Deck not found",
-      });
-      return;
+      throw new NotFoundException("Deck not found");
     }
 
     if (deck.userId !== userId) {
-      res.status(HTTP_STATUS.FORBIDDEN).json({
-        status: "error",
-        message: "You do not have permission to delete this deck",
-      });
-      return;
+      throw new ForbiddenException(
+        "You do not have permission to delete this deck",
+      );
     }
 
     // Delete all cards in the deck first
@@ -78,7 +72,6 @@ export const deleteDeck = async (
     res.status(HTTP_STATUS.NO_CONTENT).send();
   } catch (err) {
     next(err);
-    console.log("Error deleting deck:", err);
   }
 };
 
@@ -119,19 +112,13 @@ export const getDeckById = async (
     const deck = await deckService.getDeckById(id);
 
     if (!deck) {
-      res.status(HTTP_STATUS.NOT_FOUND).json({
-        status: "error",
-        message: "Deck not found",
-      });
-      return;
+      throw new NotFoundException("Deck not found");
     }
 
     if (deck.userId !== userId) {
-      res.status(HTTP_STATUS.FORBIDDEN).json({
-        status: "error",
-        message: "You do not have permission to view this deck",
-      });
-      return;
+      throw new ForbiddenException(
+        "You do not have permission to view this deck",
+      );
     }
 
     res.status(HTTP_STATUS.OK).json({
@@ -140,7 +127,6 @@ export const getDeckById = async (
     });
   } catch (err) {
     next(err);
-    console.log("Error getting deck by ID:", err);
   }
 };
 
@@ -160,19 +146,13 @@ export const updateDeckById = async (
     const deck = await deckService.getDeckById(id);
 
     if (!deck) {
-      res.status(HTTP_STATUS.NOT_FOUND).json({
-        status: "error",
-        message: "Deck not found",
-      });
-      return;
+      throw new NotFoundException("Deck not found");
     }
 
     if (deck.userId !== userId) {
-      res.status(HTTP_STATUS.FORBIDDEN).json({
-        status: "error",
-        message: "You do not have permission to update this deck",
-      });
-      return;
+      throw new ForbiddenException(
+        "You do not have permission to update this deck",
+      );
     }
 
     const updatedDeck = await deckService.updateDeck(id, { deckName });
@@ -200,30 +180,20 @@ export const generateAIDeck = async (
     const { deckName } = req.body;
 
     if (!file) {
-      res.status(HTTP_STATUS.BAD_REQUEST).json({
-        status: "error",
-        message: "No PDF file uploaded",
-      });
-      return;
+      throw new BadRequestException("No PDF file uploaded");
     }
 
     if (!deckName) {
-      res.status(HTTP_STATUS.BAD_REQUEST).json({
-        status: "error",
-        message: "Deck name is required",
-      });
-      return;
+      throw new BadRequestException("Deck name is required");
     }
 
     // Generate cards from PDF using AI
     const generatedCards = await aiService.generateCardsFromPdf(file.buffer);
 
     if (generatedCards.length === 0) {
-      res.status(HTTP_STATUS.BAD_REQUEST).json({
-        status: "error",
-        message: "Could not generate cards from the PDF content",
-      });
-      return;
+      throw new BadRequestException(
+        "Could not generate cards from the PDF content",
+      );
     }
 
     // Create the deck
@@ -255,17 +225,13 @@ export const generateAIDeck = async (
       },
     });
   } catch (err) {
-    console.log(err);
-    res.status(500).json({
-      status: "fail",
-      message: "internal server error",
-    });
     next(err);
   }
 };
 
-// this place is for getting all the cards associated with a deck
-
+/**
+ * Get all cards associated with a deck for studying
+ */
 export const studyDecks = async (
   req: Request,
   res: Response,
@@ -276,19 +242,15 @@ export const studyDecks = async (
 
     const studyDecks = await cardService.getCardsByDeckId(id);
 
-    if (!studyDecks) {
-      res.status(HTTP_STATUS.NOT_FOUND).json({
-        status: "error",
-        message: "Card not found",
-      });
+    if (!studyDecks || studyDecks.length === 0) {
+      throw new NotFoundException("No cards found in this deck");
     }
 
     res.status(HTTP_STATUS.OK).json({
       status: "success",
       data: { studyDecks },
     });
-  } catch (error) {
-    console.log(error);
-    next(error);
+  } catch (err) {
+    next(err);
   }
 };

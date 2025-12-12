@@ -38,6 +38,7 @@ export {
   createCardBody,
   updateCardBody,
   cardsByDeckParams,
+  askAiAboutCardBody,
 } from "./card.schema";
 
 // Card types
@@ -45,6 +46,7 @@ export type {
   CreateCardBody,
   UpdateCardBody,
   CardsByDeckParams,
+  AskAiAboutCardBody,
 } from "./card.schema";
 
 // User schemas

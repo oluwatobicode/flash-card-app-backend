@@ -17,6 +17,20 @@ export const createCardBody = z.object({
 });
 
 /**
+ * Ask AI about card request body
+ */
+export const askAiAboutCardBody = z.object({
+  question: z
+    .string()
+    .min(1, "Question is required")
+    .max(1000, "Question must be 1000 characters or less"),
+  answer: z
+    .string()
+    .min(1, "Answer is required")
+    .max(2000, "Answer must be 2000 characters or less"),
+});
+
+/**
  * Update card request body
  */
 export const updateCardBody = z.object({
@@ -43,3 +57,4 @@ export const cardsByDeckParams = z.object({
 export type CreateCardBody = z.infer<typeof createCardBody>;
 export type UpdateCardBody = z.infer<typeof updateCardBody>;
 export type CardsByDeckParams = z.infer<typeof cardsByDeckParams>;
+export type AskAiAboutCardBody = z.infer<typeof askAiAboutCardBody>;
