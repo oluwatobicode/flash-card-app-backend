@@ -38,12 +38,20 @@ export const updateUserProfile = async (
 ): Promise<void> => {
   try {
     const userId = req.user!.id;
-    const { studyStreak, averageMastery, lastStudyDate } = req.body;
+    const {
+      studyStreak,
+      averageMastery,
+      lastStudyDate,
+      // name, -> i tired adding this it did not work
+      // email, -> i tried adding this it did not work
+    } = req.body;
 
     const userProfile = await userProfileService.updateProfile(userId, {
       studyStreak,
       averageMastery,
       lastStudyDate,
+      // name, -> i tired adding this it did not work
+      // email, -> i tried adding this it did not work
     });
 
     res.status(HTTP_STATUS.OK).json({

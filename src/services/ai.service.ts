@@ -105,7 +105,7 @@ export const analyzeStudySession = async (sessionData: {
   averageTimePerCard: number;
   struggledTopics: string[];
 }): Promise<string> => {
-  const prompt = `Analyze this study session and provide brief, actionable feedback:
+  const prompt = `Analyze this study session and other previous study sessions and provide brief, actionable feedback:
 
 Session Data:
 - Total cards reviewed: ${sessionData.totalCards}
@@ -120,8 +120,37 @@ ${sessionData.struggledTopics.length > 0 ? `Topics struggled with:\n${sessionDat
 Provide a brief analysis (2-3 sentences) covering:
 1. Overall performance assessment
 2. One specific recommendation for improvement
+3. Weak Subjects
+4. Strong Subjects
 
 Keep the response concise and encouraging.`;
+
+  return generateContent(prompt);
+};
+
+// ai to ask about a specific card
+export const askAiAboutCard = async (cardData: {
+  question: string;
+  answer: string;
+}): Promise<string> => {
+  const userQuestion = "Explain this concept simply.";
+  const prompt = `You are Pluto, a concise flashcard tutor
+
+Context:
+Question: ${cardData.question}
+Answer: ${cardData.answer}
+
+User's Question: "${userQuestion}"
+
+
+Instructions:
+1. Answer clearly in 2-3 short sentences
+2. Use simple language
+3. Use a quick analogy if it helps clarify
+4. Do not repeat the flashcard content, just explain the gap in understanding
+
+
+Response:`;
 
   return generateContent(prompt);
 };

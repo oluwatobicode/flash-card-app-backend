@@ -30,16 +30,17 @@ An AI-powered spaced repetition flashcard application that optimizes learning th
 
 ### Relationships
 
-| Relationship | Type | Description |
-|-------------|------|-------------|
-| User → UserProfile | 1:1 | App-specific data (streaks, stats) |
-| User → Deck | 1:M | User owns many decks |
-| User → StudySession | 1:M | User has many study sessions |
-| Deck → Card | 1:M | Deck contains many cards |
+| Relationship        | Type | Description                        |
+| ------------------- | ---- | ---------------------------------- |
+| User → UserProfile  | 1:1  | App-specific data (streaks, stats) |
+| User → Deck         | 1:M  | User owns many decks               |
+| User → StudySession | 1:M  | User has many study sessions       |
+| Deck → Card         | 1:M  | Deck contains many cards           |
 
 ### Model Schemas
 
 #### UserProfile
+
 ```typescript
 {
   userId: string,        // Better Auth user ID
@@ -51,6 +52,7 @@ An AI-powered spaced repetition flashcard application that optimizes learning th
 ```
 
 #### Deck
+
 ```typescript
 {
   userId: string,
@@ -62,6 +64,7 @@ An AI-powered spaced repetition flashcard application that optimizes learning th
 ```
 
 #### Card (with SRS fields)
+
 ```typescript
 {
   deckId: ObjectId,
@@ -75,6 +78,7 @@ An AI-powered spaced repetition flashcard application that optimizes learning th
 ```
 
 #### StudySession
+
 ```typescript
 {
   userId: string,
@@ -96,57 +100,59 @@ An AI-powered spaced repetition flashcard application that optimizes learning th
 
 ### Authentication (Better Auth)
 
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/api/auth/sign-up/email` | POST | Create account |
-| `/api/auth/sign-in/email` | POST | Login with email/password |
-| `/api/auth/sign-in/social` | POST | Google OAuth |
-| `/api/auth/sign-out` | POST | Logout |
-| `/api/auth/get-session` | GET | Get current session |
-| `/api/auth/forgot-password` | POST | Request password reset |
+| Endpoint                    | Method | Description               |
+| --------------------------- | ------ | ------------------------- |
+| `/api/auth/sign-up/email`   | POST   | Create account            |
+| `/api/auth/sign-in/email`   | POST   | Login with email/password |
+| `/api/auth/sign-in/social`  | POST   | Google OAuth              |
+| `/api/auth/sign-out`        | POST   | Logout                    |
+| `/api/auth/get-session`     | GET    | Get current session       |
+| `/api/auth/forgot-password` | POST   | Request password reset    |
 
 ### User Profile
 
-| Endpoint | Method | Auth | Description |
-|----------|--------|------|-------------|
-| `/api/v1/users/profile` | GET | ✓ | Get user profile + stats |
-| `/api/v1/users/profile` | PATCH | ✓ | Update profile |
-| `/api/v1/users/dashboard-stats` | GET | ✓ | Aggregated learning stats |
+| Endpoint                        | Method | Auth | Description               |
+| ------------------------------- | ------ | ---- | ------------------------- |
+| `/api/v1/users/profile`         | GET    | ✓    | Get user profile + stats  |
+| `/api/v1/users/profile`         | PATCH  | ✓    | Update profile            |
+| `/api/v1/users/dashboard-stats` | GET    | ✓    | Aggregated learning stats |
 
 ### Decks
 
-| Endpoint | Method | Auth | Description |
-|----------|--------|------|-------------|
-| `/api/v1/decks` | GET | ✓ | Get all user's decks |
-| `/api/v1/decks` | POST | ✓ | Create empty deck |
-| `/api/v1/decks/:id` | GET | ✓ | Get deck by ID |
-| `/api/v1/decks/:id` | PATCH | ✓ | Update deck |
-| `/api/v1/decks/:id` | DELETE | ✓ | Delete deck (cascades to cards) |
-| `/api/v1/decks/generate-ai` | POST | ✓ | Upload PDF → Generate deck with cards |
+| Endpoint                      | Method | Auth | Description                     | status |
+| ----------------------------- | ------ | ---- | ------------------------------- | ------ |
+| `/api/v1/decks`               | GET    | ✓    | Get all user's decks            | done   |
+| `/api/v1/decks`               | POST   | ✓    | Create empty deck               | done   |
+| `/api/v1/decks/:id`           | GET    | ✓    | Get deck by ID                  | done   |
+| `/api/v1/decks/:id`           | PATCH  | ✓    | Update deck                     | done   |
+| `/api/v1/decks/:id`           | DELETE | ✓    | Delete deck (cascades to cards) | done   |
+| `/api/v1/decks/:deckId/cards` | GET    | ✓    | Get all cards in deck           | done   |
 
 ### Cards
 
-| Endpoint | Method | Auth | Description |
-|----------|--------|------|-------------|
-| `/api/v1/cards` | POST | ✓ | Create card in deck |
-| `/api/v1/cards/:id` | PATCH | ✓ | Edit card |
-| `/api/v1/cards/:id` | DELETE | ✓ | Delete card |
-| `/api/v1/decks/:deckId/cards` | GET | ✓ | Get all cards in deck |
+| Endpoint                    | Method | Auth | Description                                        | status |
+| --------------------------- | ------ | ---- | -------------------------------------------------- | ------ |
+| `/api/v1/cards`             | POST   | ✓    | Create card in deck                                | done   |
+| `/api/v1/cards/:id`         | PATCH  | ✓    | Edit card                                          | done   |
+| `/api/v1/cards/:id`         | DELETE | ✓    | Delete card                                        | done   |
+| `/api/v1/cards/ask-ai`      | POST   | ✓    | users click on a card ai gives a short explanation | done   |
+| `/api/v1/cards/generate-ai` | POST   | ✓    | Upload PDF → Generate cards for a specific deck    |
 
 ### Study Sessions
 
-| Endpoint | Method | Auth | Description |
-|----------|--------|------|-------------|
-| `/api/v1/study/:deckId` | GET | ✓ | Get due cards for study |
-| `/api/v1/study/sync` | POST | ✓ | Save session + update SRS |
-| `/api/v1/study/sessions` | GET | ✓ | Get session history |
-| `/api/v1/study/sessions/:id/report` | GET | ✓ | Get AI-analyzed session report |
+| Endpoint                            | Method | Auth | Description                    |
+| ----------------------------------- | ------ | ---- | ------------------------------ |
+| `/api/v1/study/:deckId`             | GET    | ✓    | Get due cards for study        |
+| `/api/v1/study/sync`                | POST   | ✓    | Save session + update SRS      |
+| `/api/v1/study/sessions`            | GET    | ✓    | Get session history            |
+| `/api/v1/study/sessions/:id/report` | GET    | ✓    | Get AI-analyzed session report |
 
 ---
 
 ## Spaced Repetition Algorithm (SM-2 Based)
 
 ### Grade Scale
+
 - **Again (0):** Complete failure, reset card
 - **Hard (1):** Struggled, shorter interval
 - **Good (2):** Recalled with effort
@@ -157,7 +163,7 @@ An AI-powered spaced repetition flashcard application that optimizes learning th
 ```typescript
 function calculateNextReview(card, grade) {
   let { easeFactor, interval, repetition } = card;
-  
+
   if (grade < 2) {
     // Failed - reset
     repetition = 0;
@@ -173,13 +179,13 @@ function calculateNextReview(card, grade) {
     }
     repetition++;
   }
-  
+
   // Adjust ease factor
   easeFactor = easeFactor + (0.1 - (3 - grade) * (0.08 + (3 - grade) * 0.02));
   easeFactor = Math.max(1.3, easeFactor); // Minimum 1.3
-  
+
   const nextReviewDate = addDays(new Date(), interval);
-  
+
   return { easeFactor, interval, repetition, nextReviewDate };
 }
 ```
@@ -208,6 +214,7 @@ function calculateNextReview(card, grade) {
 ### Gemini Prompt Templates
 
 **Card Generation:**
+
 ```
 You are a flashcard generator for educational content.
 Given the following text, create flashcards that test understanding.
@@ -226,6 +233,7 @@ Text to process:
 ```
 
 **Session Analysis:**
+
 ```
 Analyze this study session and provide feedback:
 
@@ -327,28 +335,32 @@ src/
 ## Implementation Phases
 
 ### Phase 1: Core CRUD ✓
+
 - [x] Better Auth setup with Google OAuth
 - [x] User profile management
 - [x] Service layer architecture
 
 ### Phase 2: Deck & Card Management
+
 - [ ] Full deck CRUD with cascading deletes
 - [ ] Card CRUD operations
 - [ ] PDF upload and AI card generation
 
 ### Phase 3: Study Engine
+
 - [ ] SRS algorithm implementation
 - [ ] Study session management
 - [ ] Due card fetching
 
 ### Phase 4: Analytics & AI
+
 - [ ] Session report generation
 - [ ] AI-powered feedback
 - [ ] Dashboard statistics
 
 ### Phase 5: Polish
+
 - [ ] Input validation (Joi)
 - [ ] Error handling refinement
 - [ ] Rate limiting
 - [ ] Testing
-

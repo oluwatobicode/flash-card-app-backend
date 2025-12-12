@@ -263,3 +263,32 @@ export const generateAIDeck = async (
     next(err);
   }
 };
+
+// this place is for getting all the cards associated with a deck
+
+export const studyDecks = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
+  try {
+    const { id } = req.params;
+
+    const studyDecks = await cardService.getCardsByDeckId(id);
+
+    if (!studyDecks) {
+      res.status(HTTP_STATUS.NOT_FOUND).json({
+        status: "error",
+        message: "Card not found",
+      });
+    }
+
+    res.status(HTTP_STATUS.OK).json({
+      status: "success",
+      data: { studyDecks },
+    });
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};

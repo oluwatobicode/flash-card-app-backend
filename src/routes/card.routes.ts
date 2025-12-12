@@ -44,4 +44,15 @@ router.delete(
   cardController.deleteCard,
 );
 
+// asking ai about a card
+router.post(
+  "/ask-ai",
+  validate({
+    // body: emptyObjectSchema,
+    // params: idParamSchema,
+    // query: emptyObjectSchema,
+  }),
+  cardController.askAiAboutCard,
+);
+
 export default router;

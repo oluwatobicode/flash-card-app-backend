@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { HTTP_STATUS } from "../config";
-import { cardService } from "../services";
+import { cardService, aiService } from "../services";
 
 export const createCard = async (
   req: Request,
@@ -46,10 +46,30 @@ export const askAiAboutCard = async (
   next: NextFunction,
 ): Promise<void> => {
   try {
-    // TODO: Implement ASK AI ABOUT THAT A SPECIFIC CARD LOGIC
-    res.status(200).json({
+    // const {i}
+
+    const { question, answer } = req.body;
+
+    // Validate input
+    if (!question || !answer) {
+      res.status(HTTP_STATUS.BAD_REQUEST).json({
+        status: "fail",
+        message: "question and answer are required fields",
+      });
+      return;
+    }
+
+    const explanation = await aiService.askAiAboutCard({
+      question,
+      answer,
+    });
+
+    res.status(HTTP_STATUS.OK).json({
       status: "success",
-      message: "Ask AI about card endpoint - to be implemented",
+      message: "AI explanation generated successfully",
+      data: {
+        explanation,
+      },
     });
   } catch (err) {
     next(err);

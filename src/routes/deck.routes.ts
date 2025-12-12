@@ -17,6 +17,8 @@ const router = Router();
 router.use(requireAuth);
 
 // Standard CRUD routes
+
+// create a deck
 router.post(
   "/",
   validate({
@@ -27,6 +29,7 @@ router.post(
   deckController.createDeck,
 );
 
+// get all decks
 router.get(
   "/",
   validate({
@@ -37,6 +40,7 @@ router.get(
   deckController.getAllDecks,
 );
 
+// get specific details about a specific deck
 router.get(
   "/:id",
   validate({
@@ -47,6 +51,7 @@ router.get(
   deckController.getDeckById,
 );
 
+// updating a card
 router.patch(
   "/:id",
   validate({
@@ -57,6 +62,7 @@ router.patch(
   deckController.updateDeckById,
 );
 
+// deleting a specific deck
 router.delete(
   "/:id",
   validate({
@@ -77,6 +83,15 @@ router.post(
     query: emptyObjectSchema,
   }),
   deckController.generateAIDeck,
+);
+
+// getting a specific deck with its card
+router.get(
+  "/:id/cards",
+  validate({
+    params: idParamSchema,
+  }),
+  deckController.studyDecks,
 );
 
 export default router;
