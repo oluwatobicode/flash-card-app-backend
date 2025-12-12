@@ -111,9 +111,9 @@ An AI-powered spaced repetition flashcard application that optimizes learning th
 
 ### User Profile
 
-| Endpoint                        | Method | Auth | Description               |
-| ------------------------------- | ------ | ---- | ------------------------- |
-| `/api/v1/users/profile`         | GET    | ✓    | Get user profile + stats  |
+| Endpoint                        | Method | Auth | Description               | status |
+| ------------------------------- | ------ | ---- | ------------------------- | ------ |
+| `/api/v1/users/profile`         | GET    | ✓    | Get user profile + stats  | done   |
 | `/api/v1/users/profile`         | PATCH  | ✓    | Update profile            |
 | `/api/v1/users/dashboard-stats` | GET    | ✓    | Aggregated learning stats |
 
