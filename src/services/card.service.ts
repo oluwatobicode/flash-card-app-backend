@@ -34,6 +34,24 @@ export const getCardsByDeckId = async (deckId: string): Promise<ICard[]> => {
   return Card.find({ deckId: new mongoose.Types.ObjectId(deckId) });
 };
 
+// this is for fetching all the due cards in a deck where nextReviewDate <=Date.now()
+export const getDueCardsByDeckId = async (
+  deckId: string,
+  limit: number = 20,
+): Promise<ICard[]> => {
+  const now = new Date();
+  return Card.find({
+    deckId: new mongoose.Types.ObjectId(deckId),
+    $or: [
+      { nextReviewDate: { $lte: now } },
+      { nextReviewDate: { $exists: false } },
+      { nextReviewDate: null },
+    ],
+  })
+    .sort({ nextReviewDate: 1 })
+    .limit(limit);
+};
+
 /**
  * Get a card by ID
  */

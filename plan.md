@@ -140,9 +140,9 @@ An AI-powered spaced repetition flashcard application that optimizes learning th
 
 ### Study Sessions
 
-| Endpoint                            | Method | Auth | Description                    |
-| ----------------------------------- | ------ | ---- | ------------------------------ |
-| `/api/v1/study/:deckId`             | GET    | ✓    | Get due cards for study        |
+| Endpoint                            | Method | Auth | Description                    | status |
+| ----------------------------------- | ------ | ---- | ------------------------------ | ------ |
+| `/api/v1/study/:deckId`             | GET    | ✓    | Get due cards for study        | done   |
 | `/api/v1/study/sync`                | POST   | ✓    | Save session + update SRS      |
 | `/api/v1/study/sessions`            | GET    | ✓    | Get session history            |
 | `/api/v1/study/sessions/:id/report` | GET    | ✓    | Get AI-analyzed session report |
