@@ -26,6 +26,9 @@ const userProfileSchema = new Schema<IUserProfile>(
     lastStudyDate: {
       type: Date,
     },
+    profilePictureUrl: {
+      type: String,
+    },
   },
   {
     timestamps: true,

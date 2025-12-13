@@ -42,3 +42,11 @@ export const SESSION = {
   EXPIRES_IN: TIME.ONE_WEEK, // 7 days
   UPDATE_AGE: TIME.ONE_DAY, // 1 day
 };
+
+// Upload configuration
+export const UPLOAD = {
+  MAX_PDF_SIZE: 10 * 1024 * 1024, // 10MB
+  MAX_IMAGE_SIZE: 5 * 1024 * 1024, // 5MB
+  ALLOWED_PDF_TYPES: ["application/pdf"],
+  ALLOWED_IMAGE_TYPES: ["image/jpeg", "image/png", "image/webp"],
+};

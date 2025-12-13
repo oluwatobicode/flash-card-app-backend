@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { deckController } from "../controllers";
-import { requireAuth, singlePdfUpload } from "../middleware";
+import { requireAuth, singlePdfUpload, aiLimiter } from "../middleware";
 import {
   validate,
   emptyObjectSchema,
@@ -73,9 +73,10 @@ router.delete(
   deckController.deleteDeck,
 );
 
-// AI-powered deck generation from PDF
+// AI-powered deck generation from PDF (with AI rate limiting)
 router.post(
   "/generate-ai",
+  aiLimiter,
   singlePdfUpload,
   validate({
     body: generateAIDeckBody,

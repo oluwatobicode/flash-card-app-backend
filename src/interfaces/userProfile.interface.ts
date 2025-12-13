@@ -12,6 +12,7 @@ export interface IUserProfile extends Document {
   studyStreak: number;
   averageMastery: number;
   lastStudyDate?: Date;
+  profilePictureUrl?: string;
   createdAt: Date;
   updatedAt: Date;
 }

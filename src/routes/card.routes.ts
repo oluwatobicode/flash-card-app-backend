@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { cardController } from "../controllers";
-import { requireAuth } from "../middleware";
+import { requireAuth, aiLimiter } from "../middleware";
 import {
   validate,
   emptyObjectSchema,
@@ -45,9 +45,10 @@ router.delete(
   cardController.deleteCard,
 );
 
-// asking ai about a card
+// asking ai about a card (with AI rate limiting)
 router.post(
   "/ask-ai",
+  aiLimiter,
   validate({
     body: askAiAboutCardBody,
     params: emptyObjectSchema,

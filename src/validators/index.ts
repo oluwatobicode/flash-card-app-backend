@@ -62,6 +62,7 @@ export {
   syncSessionBody,
   studyDeckParams,
   sessionIdParams,
+  sessionHistoryQuery,
 } from "./studySession.schema";
 
 // Study session types
@@ -71,4 +72,5 @@ export type {
   SyncSessionBody,
   StudyDeckParams,
   SessionIdParams,
+  SessionHistoryQuery,
 } from "./studySession.schema";

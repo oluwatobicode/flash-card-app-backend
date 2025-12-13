@@ -78,3 +78,17 @@ src/
 - Apply `validate()` middleware to all routes
 - Use `emptyObjectSchema` for requests that should have no body/params/query
 - Export types alongside schemas: `export type CreateDeckBody = z.infer<typeof createDeckBody>`
+
+### Error Handling (Exceptions)
+- Use custom exception classes instead of manual `res.status().json()` for errors
+- Exception classes are in `src/utils/exceptions.ts`
+- Import as: `import { NotFoundException, ForbiddenException } from "../utils"`
+- Available exceptions:
+  - `NotFoundException` (404) - Resource not found
+  - `BadRequestException` (400) - Invalid input
+  - `UnauthorizedException` (401) - Not authenticated
+  - `ForbiddenException` (403) - Not authorized
+  - `ConflictException` (409) - Duplicate resource
+  - `InternalServerException` (500) - Server error
+- Throw exceptions in controllers: `throw new NotFoundException("Deck not found")`
+- Error middleware in `src/middleware/error.middleware.ts` handles all exceptions automatically

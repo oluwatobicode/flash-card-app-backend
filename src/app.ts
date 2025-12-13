@@ -10,7 +10,12 @@ import {
   cardRoutes,
   studySessionRoutes,
 } from "./routes";
-import { errorHandler, notFoundHandler } from "./middleware";
+import {
+  errorHandler,
+  notFoundHandler,
+  generalLimiter,
+  authLimiter,
+} from "./middleware";
 
 const app: Application = express();
 
@@ -25,6 +30,9 @@ app.use(cors());
 // Logging
 app.use(morgan("dev"));
 
+// Apply general rate limiter to all routes
+app.use("/api", generalLimiter);
+
 // Health check route
 app.get("/health", (req, res) => {
   res.status(200).json({
@@ -33,8 +41,8 @@ app.get("/health", (req, res) => {
   });
 });
 
-// Better Auth routes - must be before other routes
-app.all("/api/auth/*", toNodeHandler(auth));
+// Better Auth routes with stricter rate limiting
+app.all("/api/auth/*", authLimiter, toNodeHandler(auth));
 
 // API routes
 app.use("/api/v1/users", userRoutes);

@@ -42,9 +42,18 @@ export const sessionIdParams = z.object({
   id: mongoIdSchema,
 });
 
+/**
+ * Session history query params (pagination)
+ */
+export const sessionHistoryQuery = z.object({
+  limit: z.coerce.number().int().min(1).max(100).optional(),
+  page: z.coerce.number().int().min(1).optional(),
+});
+
 // Type exports
 export type UserGrade = z.infer<typeof userGradeSchema>;
 export type ReviewedCard = z.infer<typeof reviewedCardSchema>;
 export type SyncSessionBody = z.infer<typeof syncSessionBody>;
 export type StudyDeckParams = z.infer<typeof studyDeckParams>;
 export type SessionIdParams = z.infer<typeof sessionIdParams>;
+export type SessionHistoryQuery = z.infer<typeof sessionHistoryQuery>;

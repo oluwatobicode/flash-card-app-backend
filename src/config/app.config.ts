@@ -20,6 +20,11 @@ dotenv.config({ path: path.resolve(__dirname, "../../.env") });
  * Google OAuth Configuration:
  * - GOOGLE_CLIENT_ID: From Google Cloud Console
  * - GOOGLE_CLIENT_SECRET: From Google Cloud Console
+ *
+ * Cloudinary Configuration:
+ * - CLOUDINARY_CLOUD_NAME: Your Cloudinary cloud name
+ * - CLOUDINARY_API_KEY: Your Cloudinary API key
+ * - CLOUDINARY_API_SECRET: Your Cloudinary API secret
  */
 export const config = {
   port: process.env.PORT || 3000,
@@ -39,4 +44,8 @@ export const config = {
   googleClientSecret: process.env.GOOGLE_CLIENT_SECRET,
   // Gemini AI
   geminiApiKey: process.env.GEMINI_API_KEY,
+  // Cloudinary
+  cloudinaryCloudName: process.env.CLOUDINARY_CLOUD_NAME,
+  cloudinaryApiKey: process.env.CLOUDINARY_API_KEY,
+  cloudinaryApiSecret: process.env.CLOUDINARY_API_SECRET,
 };

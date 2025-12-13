@@ -1,11 +1,6 @@
 import multer, { FileFilterCallback } from "multer";
 import { Request } from "express";
-
-// File size limit: 10MB
-const MAX_FILE_SIZE = 10 * 1024 * 1024;
-
-// Allowed MIME types
-const ALLOWED_MIME_TYPES = ["application/pdf"];
+import { UPLOAD } from "../config";
 
 /**
  * File filter to only accept PDF files
@@ -15,10 +10,25 @@ const pdfFileFilter = (
   file: Express.Multer.File,
   cb: FileFilterCallback,
 ): void => {
-  if (ALLOWED_MIME_TYPES.includes(file.mimetype)) {
+  if (UPLOAD.ALLOWED_PDF_TYPES.includes(file.mimetype)) {
     cb(null, true);
   } else {
     cb(new Error("Only PDF files are allowed"));
+  }
+};
+
+/**
+ * File filter to only accept image files
+ */
+const imageFileFilter = (
+  _req: Request,
+  file: Express.Multer.File,
+  cb: FileFilterCallback,
+): void => {
+  if (UPLOAD.ALLOWED_IMAGE_TYPES.includes(file.mimetype)) {
+    cb(null, true);
+  } else {
+    cb(new Error("Only JPEG, PNG, and WebP images are allowed"));
   }
 };
 
@@ -37,7 +47,7 @@ const storage = multer.memoryStorage();
 export const uploadPdf = multer({
   storage,
   limits: {
-    fileSize: MAX_FILE_SIZE,
+    fileSize: UPLOAD.MAX_PDF_SIZE,
   },
   fileFilter: pdfFileFilter,
 });
@@ -47,3 +57,23 @@ export const uploadPdf = multer({
  * Field name: "file"
  */
 export const singlePdfUpload = uploadPdf.single("file");
+
+/**
+ * Image upload middleware
+ * - Stores file in memory as buffer
+ * - Max size: 5MB
+ * - Only accepts JPEG, PNG, WebP images
+ */
+export const uploadImage = multer({
+  storage,
+  limits: {
+    fileSize: UPLOAD.MAX_IMAGE_SIZE,
+  },
+  fileFilter: imageFileFilter,
+});
+
+/**
+ * Single image upload middleware
+ * Field name: "profilePicture"
+ */
+export const singleImageUpload = uploadImage.single("profilePicture");
